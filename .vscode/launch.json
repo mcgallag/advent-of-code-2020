@@ -11,8 +11,11 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "${workspaceFolder}/day-01/main.js",
-      "console": "internalConsole",
+      "program": "${workspaceFolder}/day-02/main.ts",
+      "preLaunchTask": "tsc: build - tsconfig.json",
+      "outFiles": [
+        "${workspaceFolder}/out/**/*.js"
+      ],
       "internalConsoleOptions": "openOnSessionStart"
     }
   ]
