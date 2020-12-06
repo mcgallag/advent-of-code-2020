@@ -1,4 +1,4 @@
-const fs = require('fs/promises');
+import * as fs from "fs/promises";
 
 const input = [
   "input00.txt", "input01.txt"
@@ -11,15 +11,20 @@ fs.readFile("./day-01/" + input[input_index], "utf8")
     let addends = searchForSum3(expenses, 2020);
     // let [x, y] = addends;
     // console.log(`${x} * ${y} = ${x * y}`);
-    let [x, y, z] = addends;
-    console.log(`${x} * ${y} * ${z} = ${x * y * z}`);
+    if (addends) {
+      let [x, y, z] = addends;
+      console.log(`${x} * ${y} * ${z} = ${x * y * z}`);
+    } else {
+      console.log("No match found");
+    }
   });
 
 /**
  * Searches array `arr` for two entries that sum to `search`
  * Returns an array containing the two addends
+ * Returns `null` if no match found.
  */
-function searchForSum(arr, search) {
+function searchForSum(arr: number[], search: number): number[] | null {
   for (let i = 0; i < arr.length; i++) {
     let x = arr[i];
     for (let j = i + 1; j < arr.length && x + arr[j] <= search; j++) {
@@ -29,13 +34,15 @@ function searchForSum(arr, search) {
       }
     }
   }
+  return null;
 }
 
 /**
  * Searches array `arr` for three entries that sum to `search`
  * Returns an array containing the three addends
+ * Returns null if no match is found.
  */
-function searchForSum3(arr, search) {
+function searchForSum3(arr: number[], search: number): number[] | null {
   for (let i = 0; i < arr.length; i++) {
     let x = arr[i];
     for (let j = i + 1; j < arr.length && (x + arr[j] <= search); j++) {
@@ -48,4 +55,5 @@ function searchForSum3(arr, search) {
       }
     }
   }
+  return null;
 }
