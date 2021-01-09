@@ -130,7 +130,7 @@ class AcyclicDigraph {
   }
   // add_edge(G, x, y): adds the edge from the vertex x to the vertex y, if not already there
   public add_edge(x: number, y: number, v: number = 1): void {
-    if (this._adjacencyMatrix[x][y] == 0 || this._adjacencyMatrix[x][y] === undefined) {
+    if (x != y && this._adjacencyMatrix[x][y] == 0 || this._adjacencyMatrix[x][y] === undefined) {
       this._adjacencyMatrix[x][y] = v;
     }
   }
