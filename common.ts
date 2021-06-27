@@ -16,3 +16,21 @@ export function GetPuzzleInputAsLines(day: number, index: number): string[] {
     return input.split("\n");
   }
 }
+
+export function WriteOut(id: number, output: string) {
+  let filename: string;
+  if (id < 10) {
+    filename = "000" + id + ".txt";
+  } else if (id < 100) {
+    filename = "00" + id + ".txt";
+  } else if (id < 1000) {
+    filename = "0" + id + ".txt";
+  } else {
+    filename = id + ".txt";
+  }
+  fs.writeFileSync("debug/" + filename, output);
+}
+
+export function WriteJson(filename: string, output: any) {
+  fs.writeFileSync("debug/" + filename, JSON.stringify(output));
+}
