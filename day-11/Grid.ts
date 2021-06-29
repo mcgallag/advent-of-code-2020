@@ -76,7 +76,7 @@ export class Grid {
   get(x: number, y: number): Cell {
     // out of bounds, return invalid
     if (x < 0 || x >= this.width || y < 0 || y >= this.height) return Cell.Invalid;
-    
+
     let index = (y * this.width) + x;
     return this._grid[index];
   }
@@ -109,6 +109,36 @@ export class Grid {
     return c;
   }
 
+  /**
+   * Counts in each direction until something non-floor is detected.
+   * @returns how many occupied chairs are directed first
+   * @param x 
+   * @param y 
+   */
+  countOccupiedLong(x: number, y: number): number {
+    const check = (dx: number, dy: number): Cell => {
+      let cx = x;
+      let cy = y;
+      let type: Cell;
+      do {
+        cx += dx;
+        cy += dy;
+        type = this.get(cx, cy);
+      } while (type == Cell.Floor);
+      return type;
+    }
+    let count = 0;
+    count += (check(-1, -1) == Cell.Occupied) ? 1 : 0;
+    count += (check(0, -1) == Cell.Occupied) ? 1 : 0;
+    count += (check(1, -1) == Cell.Occupied) ? 1 : 0;
+    count += (check(-1, 0) == Cell.Occupied) ? 1 : 0;
+    count += (check(1, 0) == Cell.Occupied) ? 1 : 0;
+    count += (check(-1, 1) == Cell.Occupied) ? 1 : 0;
+    count += (check(0, 1) == Cell.Occupied) ? 1 : 0;
+    count += (check(1, 1) == Cell.Occupied) ? 1 : 0;
+    return count;
+  }
+
   // produce next generation based on current state
   iterate(): Grid {
     let next = new Grid(this.width, this.height, this.generation + 1);
@@ -131,6 +161,43 @@ export class Grid {
         } else if (this.get(x, y) == Cell.Occupied) {
           // seat is occupied, count if neighbors is less than 4
           if (this.countNeighbors(x, y, Cell.Occupied) < 4) {
+            next.set(x, y, Cell.Occupied);
+          } else {
+            swaps++;
+            next.set(x, y, Cell.Empty);
+          }
+        }
+      }
+    }
+
+    if (swaps == 0) {
+      next.stable = true;
+    }
+
+    return next;
+  }
+
+  iterate2(): Grid {
+    let next = new Grid(this.width, this.height, this.generation + 1);
+
+    let swaps = 0;
+
+    for (let y = 0; y < this.height; y++) {
+      for (let x = 0; x < this.width; x++) {
+        if (this.get(x, y) == Cell.Floor) {
+          // floors never change
+          next.set(x, y, Cell.Floor);
+        } else if (this.get(x, y) == Cell.Empty) {
+          // seat is empty, see if no occupied neighbors
+          if (this.countOccupiedLong(x, y) == 0) {
+            swaps++;
+            next.set(x, y, Cell.Occupied);
+          } else {
+            next.set(x, y, Cell.Empty);
+          }
+        } else if (this.get(x, y) == Cell.Occupied) {
+          // seat is occupied, count if neighbors is less than 5
+          if (this.countOccupiedLong(x, y) < 5) {
             next.set(x, y, Cell.Occupied);
           } else {
             swaps++;

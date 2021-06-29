@@ -7,7 +7,7 @@ function main() {
   let grid = Grid.From(input);
 
   while (!grid.stable) {
-    grid = grid.iterate();
+    grid = grid.iterate2();
   }
 
   console.log(`Number of seats occupied: ${grid.Occupied}`);
